@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 def create(request):
     if request.method == "POST":
         # store written post in DB
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('posts:list')
