@@ -5,15 +5,25 @@
       {% if posts %}
         {% for post in posts %}
           <div class="card" style="width: 40rem;">
+            <div class="card-header">
+              <span>{{ post.user }}</span>
+            </div>
+            
             <img src="{{ post.image.url }}" class="card-img-top" alt="...">
             <div class="card-body">
               <p class="card-text">{{ post.content }}</p>
-              <form action="{% url 'posts:delete' post.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="delete" class="btn btn-danger"/>
-              </form>
-
-              <a href="{% url 'posts:update' post.id %}" class="btn btn-success">edit</a>
+              
+              
+              <!-- only writer can delete/update-->
+              {% if post.user == request.user %}
+                <form action="{% url 'posts:delete' post.id %}" method="POST">
+                  {% csrf_token %}
+                  <input type="submit" value="delete" class="btn btn-danger"/>
+                </form>
+                <a href="{% url 'posts:update' post.id %}" class="btn btn-success">edit</a>
+              {% endif %}
+              
+              
             </div>
           </div>
         {% endfor %}

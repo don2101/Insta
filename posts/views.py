@@ -28,7 +28,11 @@ def list(request):
 
 @require_POST
 def delete(request, post_num):
-    post = Post.objects.get(id=post_num)
+    post = get_object_or_404(Post, pk=post_num)
+    
+    if post.user != request.user:
+        return redirect('posts:list')
+    
     post.delete()
     
     return redirect('posts:list')
@@ -36,6 +40,10 @@ def delete(request, post_num):
 
 def update(request, post_num):
     post = get_object_or_404(Post, pk=post_num)
+    
+    if post.user != request.user:
+        return redirect('posts:list')
+    
     if request.method == 'GET':
         form = PostForm(instance=post)
         
