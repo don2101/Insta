@@ -8,7 +8,11 @@
             <img src="https://picsum.photos/200/200/?random" class="card-img-top" alt="...">
             <div class="card-body">
               <p class="card-text">{{ post.content }}</p>
-              <a href="{% url 'posts:delete' post.id %}" class="btn btn-danger">delete</a>
+              <form action="{% url 'posts:delete' post.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="delete" class="btn btn-danger"/>
+              </form>
+
               <a href="{% url 'posts:update' post.id %}" class="btn btn-success">edit</a>
             </div>
           </div>

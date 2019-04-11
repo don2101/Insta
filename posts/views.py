@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
 from .models import Post
 from django.views.decorators.http import require_POST
@@ -26,6 +26,7 @@ def list(request):
     return render(request, 'posts/list.html', {'posts': posts})
 
 
+@require_POST
 def delete(request, post_num):
     post = Post.objects.get(id=post_num)
     post.delete()
@@ -34,17 +35,16 @@ def delete(request, post_num):
     
 
 def update(request, post_num):
+    post = get_object_or_404(Post, pk=post_num)
     if request.method == 'GET':
-        post = Post.objects.get(id=post_num)
         form = PostForm(instance=post)
         
         context = {}
         context['form'] = form
-        context['post'] = post
         
         return render(request, 'posts/update.html', context=context)
     else:
-        post = Post.objects.get(id=post_num)
-        post.content = request.POST.get('content')
-        post.save()
-        return redirect('posts:list')
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('posts:list')
