@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
 from .models import Post
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
-
-
 def create(request):
     if request.method == "POST":
         # store written post in DB
@@ -57,7 +57,8 @@ def update(request, post_num):
             form.save()
             return redirect('posts:list')
             
-            
+
+@login_required
 def like(request, post_num):
     # 1. get Post to like
     post = get_object_or_404(Post, pk=post_num)
@@ -67,9 +68,9 @@ def like(request, post_num):
     #    else
     #       add like
     
-    if request.user == post.like_users.all():
+    if request.user in post.like_users.all():
         post.like_users.remove(request.user)
     else:
         post.like_users.add(request.user)
-        
+    
     return redirect('posts:list')
