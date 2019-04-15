@@ -56,3 +56,20 @@ def update(request, post_num):
         if form.is_valid():
             form.save()
             return redirect('posts:list')
+            
+            
+def like(request, post_num):
+    # 1. get Post to like
+    post = get_object_or_404(Post, pk=post_num)
+    
+    # 2. the user already liked this post, 
+    #       remove like
+    #    else
+    #       add like
+    
+    if request.user == post.like_users.all():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+        
+    return redirect('posts:list')
