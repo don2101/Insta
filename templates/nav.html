@@ -6,16 +6,24 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
+      
+      <!--if user sign in-->
+      {% if user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:login' %}">Sign in</a>
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ user.username }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'accounts:logout' %}">Sign out</a>
       </li>
+      
+      <!--else-->
+      {% else %}
       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <a class="nav-link" href="{% url 'accounts:login' %}">Sign in</a>
       </li>
+      {% endif %}
+
     </ul>
   </div>
 </nav>
