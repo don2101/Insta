@@ -19,7 +19,11 @@ def login(request):
         
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('posts:list')
+            
+            # GET으로 들어온 값중 'next'가 가진 값을 가져온다
+            # next가 저의되어 있으면 해당 url로 redirect
+            # else: post:list로 redirect
+            return redirect(request.GET.get('next') or 'posts:list')
         #로그인 시킨다
         # if login_user is not None:
         #     auth_login(request, login_user)

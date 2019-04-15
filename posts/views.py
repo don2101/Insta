@@ -6,12 +6,15 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def create(request):
     if request.method == "POST":
         # store written post in DB
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
             return redirect('posts:list')
     else:
         # return form to write form
