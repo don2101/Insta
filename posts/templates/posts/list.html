@@ -25,9 +25,9 @@
             </div>
             <!--like button-->
             <div class="card-body">
-              <a href="{% url 'posts:like' post.id %}">
+              <a href="{% url 'posts:like' post.id %}" class="side-menu">
                 {% if user in post.like_users.all %}
-                  <i class="fas fa-heart"></i>
+                  <i class="fas fa-heart like"></i>
                 {% else %}
                   <i class="far fa-heart"></i>
                 {% endif %}
