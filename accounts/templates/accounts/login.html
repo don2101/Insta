@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
+{% load bootstrap4 %}
 
 {% block body %}
+
+<h2> sign - in </h2>
 <form method="POST">
-    {% csrf_token %}
-    <label>id</label>
-    <input type="text" name="username"/>
-    
-    <label>password</label>
-    <input type="password" name="password"/>
-    
-    <input type="submit" value="Submit"/>
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <button type="submit" class="btn btn-primary">login</button>
 </form>
 {% endblock %}
