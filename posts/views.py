@@ -90,10 +90,12 @@ def create_comment(request, post_num):
     post = get_object_or_404(Post, id=post_num)
     
     form = CommentForm(request.POST)
-    instance = form.save(commit=False)
-    instance.user = request.user
-    instance.post = post
-    instance.save()
+    
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.user = request.user
+        instance.post = post
+        instance.save()
     
     return redirect('posts:list')
     
