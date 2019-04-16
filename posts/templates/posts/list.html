@@ -45,17 +45,21 @@
                   {% csrf_token %}
                   <!--bootstrap_form-->
                   {% bootstrap_form comment_form %}
-                  <div><button type="submit" class="btn btn-primary">comment</button>
+                  <div><button type="submit" class="btn btn-info">comment</button>
                 </form>
                 <!--해당 글의 모든 comment 출력-->
                 
                 {% for comment in post.comment_set.all %}
                   <p>
-                    <strong>{{ comment.user }}</strong> {{ comment.content }} 
-                    <form action="{% url 'posts:delete' post.id comment.id %}">
-                      <button type="submit">delete</button>
+                    <strong>{{ comment.user.username }}</strong> {{ comment.content }} 
+                    <form action="{% url 'posts:delete_comment' post.id comment.id %}" method="POST">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger">delete</button>
                     </form>
                     </p>
+                
+                {% empty %}    
+                  <div><strong>Take me your comment</strong></div>
                 {% endfor %}
               </div>
                 
