@@ -98,7 +98,7 @@ def create_comment(request, post_num):
         instance.save()
     
     return redirect('posts:list')
-    
+
 
 @require_POST    
 @login_required
