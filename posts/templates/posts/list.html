@@ -44,8 +44,8 @@
                 <form action="{% url 'posts:create_comment' post.id %}" method="POST">
                   {% csrf_token %}
                   <!--bootstrap_form-->
-                  {% bootstrap_form comment_form %}
-                  <div><button type="submit" class="btn btn-info">comment</button>
+                  {{ comment_form }}
+                  <button type="submit" class="btn btn-info">comment</button>
                 </form>
                 
                 
