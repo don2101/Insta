@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
+from django.contrib.auth import get_user_model, update_session_auth_hash
+from .forms import CustomUserChangeForm
 
 
 # Create your views here.
@@ -59,3 +59,52 @@ def people(request, username):
     # information about user
     people = get_object_or_404(get_user_model(), username=username)
     return render(request, 'accounts/people.html', { 'people': people })
+    
+
+# change account information(editting & updating)
+# @login_required
+def update(request):
+    if request.method == "POST":
+        # updating
+        user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
+        
+        if user_change_form.is_valid():
+            user = user_change_form.save()
+            
+            return redirect('people', user.username)
+        
+    else:
+        # editting
+        user_change_form = CustomUserChangeForm(instance=request.user)
+        context = {
+            'user_change_form': user_change_form,
+        }
+        
+        return render(request, 'accounts/update.html', context)
+        
+        
+def delete(request):
+    if request.method == "POST":
+        request.user.delete()
+        return redirect('accounts:signup')
+    
+    return render(request, 'accounts/delete.html')
+    
+
+def password(request):
+    if request.method == "POST":
+        password_change_form = PasswordChangeForm(request.user, request.POST)
+        
+        if password_change_form.is_valid():
+            user = password_change_form.save()
+            update_session_auth_hash(request, user)
+        
+            return redirect('people', request.user.username)
+    else:
+        password_change_form = PasswordChangeForm(request.user)
+        context = {
+            'password_change_form': password_change_form
+        }
+        
+        return render(request, 'accounts/password.html', context)
+    

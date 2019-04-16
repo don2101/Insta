@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        <p>정말로 탈퇴하시겠습니까? ㅠㅠ</p>
+        <button class="btn btn-info">아니요</button>
+        <button class="btn btn-danger">예</button>
+    </form>
+{% endblock %}
