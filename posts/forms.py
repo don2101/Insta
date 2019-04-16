@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 
 # PostModelForm definition for contrall Post
 class PostForm(forms.ModelForm):
@@ -16,8 +16,8 @@ class PostForm(forms.ModelForm):
         
         
 class CommentForm(forms.ModelForm):
-    content = forms.CharField(label="comment", widget=forms.Textarea())
+    content = forms.CharField(label="comment")
     
     class Meta:
-        model = CommentForm
-        fields = ['comment', 'post', 'user']
+        model = Comment
+        fields = ['content']

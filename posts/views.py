@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import PostForm
-from .models import Post
+from .forms import PostForm, CommentForm
+from .models import Post, Comment
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
@@ -25,8 +25,14 @@ def create(request):
 def list(request):
     # show all post
     posts = Post.objects.all()
+    comment_form = CommentForm()
     
-    return render(request, 'posts/list.html', {'posts': posts})
+    context = {}
+    context['posts'] = posts
+    context['comment_form'] = comment_form
+    
+    
+    return render(request, 'posts/list.html', context=context)
 
 
 @require_POST
@@ -77,3 +83,29 @@ def like(request, post_num):
         post.like_users.add(request.user)
     
     return redirect('posts:list')
+
+@require_POST
+@login_required
+def create_comment(request, post_num):
+    post = get_object_or_404(Post, id=post_num)
+    
+    form = CommentForm(request.POST)
+    instance = form.save(commit=False)
+    instance.user = request.user
+    instance.post = post
+    instance.save()
+    
+    return redirect('posts:list')
+    
+
+@require_POST    
+@login_required
+def delete_comment(request, post_num, comment_num):
+    comment = get_object_or_404(Comment, id=comment_num)
+    
+    if request.user == comment.user:
+        comment.delete()
+        
+    return redirect('posts:list')
+    
+    
