@@ -3,7 +3,13 @@
 
 {% block body %}
 <h1>{{ people.username }}</h1>
-<p>{{ people.lastname }} {{ people.firstname }}</p>
+<p>{{ people.last_name }} {{ people.first_name }}</p>
+<p>
+  <strong>{{ people.profile.nickname }}</strong>
+</p>
+<p>
+  {{ people.profile.description }}
+</p>
 
 {% if user == people %}
 <a href="{% url 'accounts:update' %}" class="btn btn-info">회원정보 수정</a>
