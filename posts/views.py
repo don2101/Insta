@@ -24,26 +24,29 @@ def create(request):
 
 def get_follower_posts(followers, posts):
     for follower in followers:
-        posts.union(posts, follower.post_set.all())
-
-
+        posts = posts.union(follower.post_set.all())
+    
+    return posts
+    
+    
 def list(request):
     # show all post
-    posts = request.user.post_set.all()
-    comment_form = CommentForm()
-    followers = request.user.followers.all()
     
-    get_follower_posts(followers, posts)
+    if request.user.is_authenticated:
+        posts = request.user.post_set.all()
+        comment_form = CommentForm()
+        followers = request.user.followers.all()
+        
+        posts = get_follower_posts(followers, posts)
+        
+        context = {}
+        context['posts'] = posts
+        context['comment_form'] = comment_form
+        
+        return render(request, 'posts/list.html', context=context)
+    else:
+        return render(request, 'posts/list.html')
     
-    print(posts)
-    
-    context = {}
-    context['posts'] = posts
-    context['comment_form'] = comment_form
-    context['followers'] = followers
-    
-    
-    return render(request, 'posts/list.html', context=context)
 
 
 @require_POST
