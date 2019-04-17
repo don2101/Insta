@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from .forms import CustomUserChangeForm
+from .modles import Profile
 
 
 # Create your views here.
@@ -47,7 +48,7 @@ def signup(request):
         
         if form.is_valid():
             user = form.save()
-
+            Profile.objects.create(user=user)
             auth_login(request, user)
             return redirect('posts:list')
     else:
