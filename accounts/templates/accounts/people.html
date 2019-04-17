@@ -2,11 +2,20 @@
 
 
 {% block body %}
-<h1>{{ people.username }}</h1>
+<h1>{{ people.username }}
+
+{% if user in people.followers.all %}
+<a href="{% url 'accounts:follow' people.id %}" class="btn btn-primary">Follow</a>
+{% else %}
+<a href="{% url 'accounts:follow' people.id %}" class="btn btn-outline-primary">Unfollow</a>
+{% endif %}
+</h1>
+
 <p>{{ people.last_name }} {{ people.first_name }}</p>
-<p>
-  <strong>{{ people.profile.nickname }}</strong>
-</p>
+<p><strong>{{ people.profile.nickname }}</strong></p>
+<p>{{ people.followers.count }}</p>
+
+
 <p>
   {{ people.profile.description }}
 </p>

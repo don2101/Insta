@@ -4,7 +4,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model, update_session_auth_hash
-from .forms import CustomUserChangeForm, ProfileForm
+from .forms import CustomUserChangeForm, ProfileForm, CustomUserCreationForm
 from .models import Profile
 
 
@@ -44,7 +44,7 @@ def logout(request):
     
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         
         if form.is_valid():
             user = form.save()
@@ -52,7 +52,7 @@ def signup(request):
             auth_login(request, user)
             return redirect('posts:list')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
         return render(request, 'accounts/signup.html', {'form': form})
         
         
@@ -117,3 +117,16 @@ def password(request):
         
         return render(request, 'accounts/password.html', context)
     
+    
+def follow(request, user_id):
+    follower = get_object_or_404(get_user_model(), pk=user_id)
+    
+    # 만약 현재 유저가 해당 유저를 이미 팔로우 하고 있다면
+    # 팔로우 취소
+    if request.user != follower:
+        if request.user in follower.followers.all() :
+            follower.followers.remove(request.user)
+        else:
+            follower.followers.add(request.user)
+    
+    return redirect('people', follower.username)
