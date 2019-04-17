@@ -8,6 +8,7 @@
 <form method="POST">
   {% csrf_token %}
   {% bootstrap_form user_change_form %}
+  {% bootstrap_form profile_form %}
 
   <button type="submit" class="btn btn-primary">정보 수정</button>
 </form>
