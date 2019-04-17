@@ -22,14 +22,25 @@ def create(request):
         return render(request, 'posts/create.html', {'form': form})
 
 
+def get_follower_posts(followers, posts):
+    for follower in followers:
+        posts.union(posts, follower.post_set.all())
+
+
 def list(request):
     # show all post
-    posts = Post.objects.all()
+    posts = request.user.post_set.all()
     comment_form = CommentForm()
+    followers = request.user.followers.all()
+    
+    get_follower_posts(followers, posts)
+    
+    print(posts)
     
     context = {}
     context['posts'] = posts
     context['comment_form'] = comment_form
+    context['followers'] = followers
     
     
     return render(request, 'posts/list.html', context=context)

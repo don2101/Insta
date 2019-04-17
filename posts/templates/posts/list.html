@@ -5,6 +5,7 @@
 {% block body %}
     <div class="row justify-content-center">
       
+      <!-- user posts 출력 -->
       {% if posts %}
         {% for post in posts %}
           <div class="card" style="width: 40rem;">
@@ -25,7 +26,10 @@
                 </form>
                 <a href="{% url 'posts:update' post.id %}" class="btn btn-success">edit</a>
               {% endif %}
+              
             </div>
+            
+            
             <!--like button-->
             <div class="card-body">
               <a href="{% url 'posts:like' post.id %}" class="side-menu">
@@ -50,7 +54,6 @@
                 
                 
                 <!--해당 글의 모든 comment 출력-->
-                
                 {% for comment in post.comment_set.all %}
                   <p>
                     <strong>{{ comment.user.username }}</strong> {{ comment.content }} 
