@@ -35,7 +35,7 @@ def list(request):
     if request.user.is_authenticated:
         posts = request.user.post_set.all()
         comment_form = CommentForm()
-        followers = request.user.followers.all()
+        followers = request.user.followings.all()
         
         posts = get_follower_posts(followers, posts)
         
