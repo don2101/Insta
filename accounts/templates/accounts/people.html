@@ -2,6 +2,10 @@
 
 
 {% block body %}
+
+<img src="{{ people.profile.profile_image.url }}" style="width:100px;height:100px;">
+
+
 <h1>{{ people.username }}
 
 {% if user in people.followers.all %}

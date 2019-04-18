@@ -5,7 +5,7 @@
 {% block body %}
 
 <h2> Change Information </h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   {% bootstrap_form user_change_form %}
   {% bootstrap_form profile_form %}

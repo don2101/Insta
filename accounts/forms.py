@@ -7,13 +7,13 @@ from .models import Profile
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'first_name', 'last_name', ]
+        fields = ['username', 'email', 'first_name', 'last_name']
         
         
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['description', 'nickname', ]
+        fields = ['description', 'nickname', 'profile_image']
         
         
 class CustomUserCreationForm(UserCreationForm):
