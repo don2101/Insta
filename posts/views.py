@@ -30,6 +30,7 @@ def get_follower_posts(followers, posts):
     return posts
     
     
+@login_required
 def list(request):
     # show all post
     
