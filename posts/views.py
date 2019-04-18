@@ -3,6 +3,7 @@ from .forms import PostForm, CommentForm
 from .models import Post, Comment
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 # Create your views here.
@@ -33,11 +34,20 @@ def list(request):
     # show all post
     
     if request.user.is_authenticated:
-        posts = request.user.post_set.all()
-        comment_form = CommentForm()
-        followers = request.user.followings.all()
+        # 1. 직관적인 방법
+        # posts = request.user.post_set.all()
+        # followers = request.user.followings.all()
+        # posts = get_follower_posts(followers, posts)
         
-        posts = get_follower_posts(followers, posts)
+        # 2. field lookup 사용
+        # posts = Post.objects.filter(user_id__in=request.user.followings.all())
+        # my_posts = request.user.post_set.all()
+        # posts=posts.union(my_posts)
+        
+        # 3. Q object 사용
+        posts = Post.objects.filter(Q(user_id__in=request.user.followings.all()) | Q(user=request.user))
+        
+        comment_form = CommentForm()
         
         context = {}
         context['posts'] = posts
@@ -45,7 +55,7 @@ def list(request):
         
         return render(request, 'posts/list.html', context=context)
     else:
-        return render(request, 'posts/list.html')
+        return redirect('accounts:login')
     
 
 
