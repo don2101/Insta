@@ -10,7 +10,7 @@
         {% for post in posts %}
           <div class="card" style="width: 40rem;">
             <div class="card-header">
-              <span>{{ post.user }}</span>
+              <span><a href="{% url 'people' post.user.username  %}">{{ post.user }}</a></span>
             </div>
             
             <img src="{{ post.image.url }}" class="card-img-top" alt="...">
