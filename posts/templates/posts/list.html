@@ -14,17 +14,22 @@
             </div>
             
             <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+            
             <div class="card-body">
               <p class="card-text">{{ post.content }}</p>
               
-              
               <!-- only writer can delete/update-->
               {% if post.user == request.user %}
-                <form action="{% url 'posts:delete' post.id %}" method="POST">
+              <div style="display: flex">
+                <form action="{% url 'posts:delete' post.id %}" method="POST" class="mr-3">
                   {% csrf_token %}
                   <input type="submit" value="delete" class="btn btn-danger"/>
                 </form>
-                <a href="{% url 'posts:update' post.id %}" class="btn btn-success">edit</a>
+                <form action="{% url 'posts:update' post.id %}" method="POST">
+                  {% csrf_token %}
+                  <input type="submit" value="edit" class="btn btn-success"/>
+                </form>
+              </div>
               {% endif %}
               
             </div>
